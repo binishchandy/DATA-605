@@ -32,5 +32,11 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
-# Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
+more/
+#*.html
+*.css
+
+.DS_Store
 rsconnect/
+*.Rproj
+*.R
