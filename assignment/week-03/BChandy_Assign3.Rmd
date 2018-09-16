@@ -1,0 +1,293 @@
+---
+title: "Assignment 3"
+author: "Binish Kurian Chandy"
+date: "9/16/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Problem Set 1
+(1) What is the rank of the matrix A?   
+A = 
+```{r, echo=FALSE}
+(A = matrix(c(1, 2, 3, 4, -1, 0, 1, 3,0, 1, -2, 1, 5, 4, -2, -3), nrow = 4, byrow = T))
+```
+```{r}
+(rank = qr(A)$rank)
+```
+
+(2) Given an mxn matrix where m > n, what can be the maximum rank? The minimum
+rank, assuming that the matrix is non-zero?
+```
+In a mxn matris where m > n the maximum rank will be the the minimum between m and n. 
+So the maximum rank is n.
+
+Assuming the matrix is non-zero, the minimum rank is 1.
+```
+
+(3) What is the rank of matrix B?  
+B = 
+```{r, echo=FALSE}
+(B = matrix(c(1, 2, 1, 3, 6, 3, 2, 4, 2), nrow = 3, byrow = T))
+```
+```{r}
+(rank = qr(B)$rank)
+```
+
+### Problem set 2
+
+Compute the eigenvalues and eigenvectors of the matrix A. You'll need to show your
+work. You'll need to write out the characteristic polynomial and show your solution.
+A = 
+```{r}
+(A = matrix(c(1, 2, 3, 0, 4, 5, 0, 0, 6), nrow = 3, byrow = T))
+```
+
+```
+Eigen values
+```
+$$
+\lambda I_{3} =
+\begin{bmatrix}
+\lambda & 0 & 0 \\
+0 & \lambda & 0 \\
+0 & 0 & \lambda
+\end{bmatrix}
+$$
+
+$$
+\lambda I_{3} - A =
+\begin{bmatrix}
+\lambda - 1 & -2 & -3 \\
+0 & \lambda - 4 & -5 \\
+0 & 0 & \lambda - 6
+\end{bmatrix}
+$$
+
+```
+(λ−1)[(λ−4)(λ−6)−0]−2(0)+3(0)=0 
+
+(λ−1)(λ^2−10λ+24)=0
+
+λ^3−11λ^2+34λ−24=0 => Characteristic polynomial
+
+(λ-1)(λ-4)(λ-6)=0
+
+λ = 1,4,6
+```
+
+```
+Eigen Vectors
+```
+
+For $\lambda_{1} = 1$
+
+$$
+\begin{bmatrix}
+\lambda - 1 & -2 & -3 \\
+0 & \lambda - 4 & -5 \\
+0 & 0 & \lambda - 6
+\end{bmatrix}
+\vec{v} = \vec{0}
+$$
+
+$$
+\begin{bmatrix}
+0 & -2 & -3 \\
+0 & -3 & -5 \\
+0 & 0 & -5
+\end{bmatrix}
+\begin{bmatrix}
+v_{1} \\
+v_{2} \\
+v_{3}
+\end{bmatrix}=
+\begin{bmatrix}
+0 \\
+0 \\
+0
+\end{bmatrix}
+$$
+
+```{r echo=TRUE}
+A1 <- matrix(c(0, -2,-3, 0, -3, -5, 0, 0, -5), nrow = 3, byrow = T)
+#Row reduction 
+(A1[1,] <- A1[1,] / -2)
+
+(A1[2,] <- A1[1,] *3 + A1[2,])
+
+(A1[2,] <- A1[2,] / -.5)
+
+(A1[1,] <- A1[1,] - A1[2,] * 1.5)
+
+(A1[3,] <- A1[3,] + A1[2,] * 5)
+A1
+```
+
+$$
+(\lambda I_{3} - A)v = 
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1  \\
+0 & 0 & 0 
+\end{bmatrix}
+\begin{bmatrix}
+v_{1} \\
+v_{2} \\
+v_{3}
+\end{bmatrix}
+$$
+
+$v_{2} = 0$
+
+$v_{3} = 0$
+
+Let, $v_{1} = t$   
+t be any real number
+
+$$
+E_{\lambda =1}= t
+\begin{bmatrix}
+1 \\
+0 \\
+0
+\end{bmatrix}
+$$
+
+For $\lambda_{2} = 4$
+
+$$
+\begin{bmatrix}
+3 & -2 & -3 \\
+0 & 0 & -5 \\
+0 & 0 & -2
+\end{bmatrix}
+\begin{bmatrix}
+v_{1} \\
+v_{2} \\
+v_{3}
+\end{bmatrix}=
+\begin{bmatrix}
+0 \\
+0 \\
+0
+\end{bmatrix}
+$$
+
+```{r, echo=TRUE}
+A2 <- matrix(c(3, -2, -3, 0, 0, -5, 0, 0, -2), nrow = 3, byrow = T)
+#Row reduction
+(A2[1,] <- A2[1,]/3)
+
+(A2[2,] <- A2[2,] / -5)
+
+(A2[1,] <- A2[1,] + A2[2,]) 
+
+(A2[3,] <- A2[2,] * 2 + A2[3,])
+A2
+```
+
+$$
+(\lambda I_{3} - A)v = 
+\begin{bmatrix}
+1 & -0.6666667 & 0 \\
+0 & 0 & 1 \\
+0 & 0 & 0 
+\end{bmatrix}
+\begin{bmatrix}
+v_{1} \\
+v_{2} \\
+v_{3}
+\end{bmatrix}
+$$
+
+$v_{1} - 0.6666667v_{2} = 0$
+
+$v_{3} = 0$
+
+Let, $v_{2} =t$
+
+$ie. 0.6666667t = v_{1}$
+
+$$
+E_{\lambda =4}= t
+\begin{bmatrix}
+0.6666667 \\
+1 \\
+0
+\end{bmatrix}
+$$
+
+For $\lambda_{3} = 6$
+
+$$
+\begin{bmatrix}
+5 & -2 & -3 \\
+0 & 2 & -5 \\
+0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+v_{1} \\
+v_{2} \\
+v_{3}
+\end{bmatrix}=
+\begin{bmatrix}
+0 \\
+0 \\
+0
+\end{bmatrix}
+$$
+
+```{r, echo=TRUE}
+A3 <- matrix(c(5, -2, -3, 0, 2, -5, 0, 0, 0), nrow = 3, byrow = T)
+#Row reduction
+(A3[1,] <- A3[1,] / 5)
+
+(A3[2,] <- A3[2,] / 2)
+
+(A3[1,] <- A3[2,] * .4 + A3[1,])
+A3
+```
+
+$$
+(\lambda I_{3} - A)v = 
+\begin{bmatrix}
+1 & -0.4 & -1.6 \\
+0 & 1 & -2.5 \\
+0 & 0 & 0 
+\end{bmatrix}
+\begin{bmatrix}
+v_{1} \\
+v_{2} \\
+v_{3}
+\end{bmatrix}
+$$
+
+$v_{1} - 1.6v_{3} = 0$
+
+$v_{2} - 2.5v_{3}= 0$
+
+Let, $v_{3} =t$
+
+$ie. 1.6t = v_{1}$
+
+$2.5t = v_{2}$
+
+$$
+E_{\lambda =6}= t
+\begin{bmatrix}
+1.6 \\
+2.5 \\
+0
+\end{bmatrix}
+$$
+
+check using R
+
+```{r, echo=TRUE}
+A <- matrix(c(1, 2, 3, 0, 4, 5, 0, 0, 6), nrow = 3, byrow = T)
+eigen(A)
+```
