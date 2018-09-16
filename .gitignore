@@ -27,6 +27,8 @@ vignettes/*.pdf
 # knitr and R markdown default cache directories
 /*_cache/
 /cache/
+*master/
+
 
 # Temporary files created by R markdown
 *.utf8.md
@@ -41,3 +43,6 @@ rsconnect/
 *.Rproj
 *.R
 .Rproj.user
+*master/
+*.zip
+fcla-3.50-tablet.pdf
