@@ -1,0 +1,14 @@
+---
+title: "Discussion 4"
+author: "Binish Kurian Chandy"
+date: "9/19/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## C25
+
+ ![C25](C25.png) 
