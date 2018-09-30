@@ -1,0 +1,23 @@
+---
+title: "Assignment 05"
+author: "Binish Kurian Chandy"
+date: "9/30/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Problem
+
+Choose independently two numbers $B$ and $C$ at random from the interval $[0, 1]$ with
+uniform density. Prove that $B$ and $C$ are proper probability distributions.
+
+Find the probability that
+
+ ![page-1](HW5-1.png) 
+ ![page-2](HW5-2.png) 
+ ![page-3](HW5-3.png) 
+
+
