@@ -1,0 +1,20 @@
+---
+title: "Discussion 6"
+author: "Binish Kurian Chandy"
+date: "10/2/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Chapter 3 Exercise 1
+Four people are to be arranged in a row to have their picture taken. In how
+many ways can this be done?
+```
+First position can be filled by any of the 4 people, second by remaining 3, second by remaining 2 and last by
+remaining 1.
+
+So total ways = 4 * 3 * 2 * 1 = 24
+```

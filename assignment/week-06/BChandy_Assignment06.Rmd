@@ -1,0 +1,136 @@
+---
+title: "Homework 06"
+author: "Binish Kurian Chandy"
+date: "10/6/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1
+```
+A = Selecting red ball
+p(A) = 54 / (54 + 9 + 75)
+B = Selecting blue ball
+p(B) = 75 / (54 + 9 + 75)
+
+p(A or B) = P(A) + p(B) = 54 / (54 + 9 + 75) + 75 / (54 + 9 + 75) = .9348
+```
+
+## 2
+```
+A = Selecting red golf ball
+p(A) = 20 / (19 + 20 + 24 + 17) = 0.25
+```
+
+## 3
+```
+p(Male or Doesn't live with parents) = 1 - p(Male AND live with parents) = 1 - 215/1399 = 0.8463
+```
+
+## 4
+```
+They are most likey to be Dependent events. This can be confirmed only with additional information.
+```
+
+## 5
+```
+Since the veggie wraps needs to be different, this can be treated as a arrangement problem
+ie. 8 * 7 * 6 * 7 * 6 * 5 * 3 = 211,680
+```
+
+## 6
+```
+They are Independent events.
+```
+
+## 7
+```
+First spot can be filled by any of 14 eligible members, next by 13 and so on till 8th spot.
+ie  
+```
+```{r}
+(14 * 13 * 12 * 11 * 10 * 9 * 8 * 7)
+```
+
+## 8
+```
+Number of ways of selecting 0 red jelly beans = 9C0
+Number of ways of selecting 1 orange jelly beans = 4C1
+Number of ways of selecting 0 green jelly beans = 9C3
+
+Total number of ways of selecting 3 jelly beans = 22C4
+
+Total probability = (9C0 + 4C1 + 9C3) / 22C4 = 0.0459
+```
+
+## 9
+```{r}
+11 * 10 * 9 * 8
+```
+
+## 10
+```
+The complement is 33% of subscribers to a fitness magazine are 34 years old or younger.
+```
+
+## 11
+```
+Using a binomial random variable formula, we get the probability of getting exactly 3 heads as follows.
+ => NCx*p^x*(1-p)^(N-x) = C(4,3) * 0.5^3 * 0.5^1 = 0.25
+ 
+ p(win) = 0.25
+ p(loss) = 1 - p(win) = 0.75 
+ 
+ Step 1: E[proposition] = 97 * 0.25 - 30 * 0.75 = $1.75
+ Step 2: E[559 times step 1] = 559 * 1.75 = $978.25
+```
+
+## 12
+```
+Using a binomial random variable formula, => NCx*p^x*(1-p)^(N-x)
+
+Probability of 0 tails = 9C0 * .5^0 * (1 - .5)^9 = 1 * .5^9
+Probability of 1 tails = 9C1 * .5^1 * (1 - .5)^8 = 9 * .5^9
+Probability of 2 tails = 9C2 * .5^2 * (1 - .5)^7 = 36 * .5^9
+Probability of 3 tails = 9C3 * .5^3 * (1 - .5)^6 = 84 * .5^9
+Probability of 4 tails = 9C4 * .5^4 * (1 - .5)^5 = 126 * .5^9
+
+p(4 tail or less) = (1 + 9 + 36 + 84 + 126) * (1/2)^9 = 256/512 = 0.5
+p(win) = 0.5
+p(loss) = 1 - 0.5 = 0.5
+
+Step 1 : E[X] = 23 * 0.5 - 0.5 * 26 = $-1.50
+You will loose $1.50
+Step 2 : 499 * -1.50 = -1491
+You will loose $1491
+```
+
+## 13
+![table](table.png) 
+```
+Based on the tree diagram above, following questions are solved.
+a.
+```
+```{r}
+0.2 * 0.59 / (0.2 * 0.59 + 0.8 * 0.1)
+```
+```
+b.
+```
+```{r}
+0.8 * 0.9 / (0.8 * 0.9 + 0.2 * 0.41)
+```
+```
+c.
+P(AUB) = P(A) + P(B) - P(A AND B)
+A = Randomly selected individual is a liar
+B = Randomly selected individual identified as liar by polygraph
+
+P(A) = 0.2
+P(B) = 0.2 * 0.59 + 0.8 * 0.1 = 0.198
+P(A AND B) = 0.2 * 0.59 = 0.118
+P(A OR B) = 0.2 + 0.198 - 0.118 = 0.28
+```
