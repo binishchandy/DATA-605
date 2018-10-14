@@ -1,0 +1,26 @@
+---
+title: "Discussion 07"
+author: "Binish Kurian Chandy"
+date: "10/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 13
+
+The Poisson distribution with parameter lambda = .3 has been assigned for the
+outcome of an experiment. Let X be the outcome function. Find P(X = 0),
+P(X = 1).
+
+P(X = 0)
+```{r}
+(.3)^0 * exp(-.3) / factorial(0) 
+```
+
+P(X = 1)
+```{r}
+(.3)^1 * exp(-.3) / factorial(1) 
+```
