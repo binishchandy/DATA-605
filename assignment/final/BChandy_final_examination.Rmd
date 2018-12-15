@@ -1,0 +1,282 @@
+---
+title: "Final Examination"
+author: "Binish Kurian Chandy"
+date: "12/11/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(corrplot)
+library(RColorBrewer)
+library(matrixcalc)
+library(moments)
+library(MASS)
+```
+
+## Problem 1
+
+```{r}
+data <- read.csv("/Users/bchand005c/CUNY/DATA-605/assignment/final/data.csv", header = TRUE)
+X <- data$X1
+Y <- data$Y1
+(x <- quantile(X, 0.75))
+(y <- quantile(Y, 0.25))
+(n <- nrow(data))
+(ny <- nrow(subset(data, Y > y)))
+```
+
+a.   $P(X>x | Y>y)$, probability of X is higer then 3rd quantile (more then 15.825) given that Y is higher then 1st quantile (higer then 18.55)
+```{r p1, echo=TRUE}
+(pa <- nrow(subset(data, X > x & Y > y))/ny)
+```
+
+b.   $P(X>x, Y>y)$, probability of both X is higer then 3rd quantile (more then 15.825) and Y is higher then 1st quantile (higer then 18.55)
+```{r p2, echo=TRUE}
+(pb<-nrow(subset(data, X > x & Y > y))/n)
+```
+
+c.   $P(X<x | Y>y)$, probability of X is lower then 3rd quantile (less then 15.825) given that Y is higher then 1st quantile (higer then 18.55)
+```{r p3, echo=TRUE}
+(pc <- nrow(subset(data, X < x & Y > y))/ny)
+```
+
+### Table
+```{r table, echo=TRUE}
+t <- c(nrow(data[X<=x & Y<=y,]),
+       nrow(data[X<=x & Y>y,]))
+t <- rbind(t, c(nrow(data[X>x & Y<=y,]),
+       nrow(data[X>x & Y>y,])))
+t <- cbind(t, t[,1] + t[,2])
+t <- rbind(t, t[1,] + t[2,])
+colnames(t) <- c("<=3d quartile", ">3d quartile", "Total")
+rownames(t) <- c("<=1st quartile", ">1 st quartile", "Total")
+knitr::kable(t)
+```
+
+### Checking for independence
+```{r independence, echo=TRUE}
+X <- data$X1
+Y <- data$Y1
+(x <- quantile(X, 0.25))
+(y <- quantile(Y, 0.25))
+A <- X > x
+B <- Y > y
+# Calculate P(AB)
+(P_AB = sum(A[B]) / length(Y))
+
+# Calculate P(A) * P(B)
+P_A = sum(A)/length(Y)
+P_B = sum(B)/length(Y)
+(P_A * P_B)
+```
+The above shows that P(AB)≠P(A)P(B), i.e. that A and B are not independent.
+
+### Chi-Square Test
+```{r chi, echo=TRUE}
+(ptest <- chisq.test(table(X > x, Y > x)))
+```
+Since p-value is less than significane level of alpha = 0.05, the variables are statisically dependent.
+
+## Problem 2
+```{r}
+train <- read.csv("/Users/bchand005c/CUNY/DATA-605/assignment/final/train.csv", header = TRUE)
+summary(train)
+
+X <- train$TotalBsmtSF
+Y <- train$SalePrice
+
+summary(X)
+hist(X, xlab="TotalBsmtSF", main = "Histogram of TotalBsmtSF")
+boxplot(X)
+
+summary(Y)
+hist(Y, xlab="SalePrice", main = "Histogram of Frequencies")
+boxplot(Y)
+
+plot(X,Y, xlab='TotalBsmtSF', ylab='SalePrice', main='TotalBsmtSF vs SalePrice')
+
+Z <- train$LotFrontage 
+plot(X,Z, xlab='LotFrontage', ylab='SalePrice', main='LotFrontage vs SalePrice')
+```
+
+### Correlation Matrix
+```{r, warning =FALSE, echo=FALSE}
+vars <- c("TotalBsmtSF", "GrLivArea", "SalePrice")
+values <- train[vars]
+
+corr_matrix <- cor(values)
+round(corr_matrix, 2)
+
+corrplot(corr_matrix, type="upper", order="hclust",  col=brewer.pal(n=8, name="RdBu"))
+```
+The above plot shows the correlation coefficients in colors (blue for positive correlation and red for negative
+correlation).
+
+### Test hypotheses at 80% confidence interval
+### TotalBsmtSF vs GrLivArea
+```{r}
+cor.test(train$TotalBsmtSF, train$GrLivArea, conf.level = 0.80, method = "pearson")
+```
+### GrLivArea vs SalePrice
+```{r}
+cor.test(train$GrLivArea, train$SalePrice, conf.level = 0.80, method = "pearson")
+```
+### TotalBsmtSF vs SalePrice
+```{r}
+cor.test(train$TotalBsmtSF, train$SalePrice, conf.level = 0.80, method = "pearson")
+```
+Conclusion : In all the above three tests, null hypothesis is rejected in favor of alternate hypothesis.
+
+### Would you be worried about familywise error? Why or why not?
+Familywise errors are based on Type 1 or Type 2 errors. We should be worried when we observe extremely low
+p value and moderate values of correlation coefficients. Here it is not the case. So I am not worried about it.
+
+## Linear Algebra and Correlation
+Correlation matrix
+```{r}
+corr_matrix
+```
+Invert the correlation matrix
+```{r, echo= FALSE}
+precision_matrix <- solve(corr_matrix)
+precision_matrix
+```
+Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. 
+```{r}
+round(corr_matrix %*%  precision_matrix)
+round(precision_matrix %*%  corr_matrix)
+```
+In both cases Identity matrix is obtained.
+
+### LU Decomposition
+```{r}
+(LU <- lu.decomposition(precision_matrix))
+```
+
+## Calculus-Based Probability & Statistics
+```{r}
+X <- train$TotalBsmtSF
+hist(X, main = "TotalBsmtSF")
+skewness(X)
+summary(X)
+```
+TotalBsmtSF is skewed to right.
+
+Shifting above 0 since min value is 0
+```{r}
+X <- X + 1
+lamda <- fitdistr(X, 'exponential')
+lamda$estimate
+```
+The optimum of lambda is 0.0009447961
+
+### Take 1000 samples
+```{r, }
+sample <- rexp(1000, lamda$estimate)
+```
+
+### Plot a histogram and compare it with a histogram of your original variable.   
+```{r}
+# Compare the two histograms side-by-side.
+par(mfrow=c(1, 2))
+hist(train$TotalBsmtSF, main="X (TotalBsmtSF)")
+hist(sample, main="Exponential Distr for X")
+```
+
+### 
+```{r}
+# For X
+quantile(train$TotalBsmtSF, probs=c(0.05, 0.95))
+# For sample
+quantile(sample, probs=c(0.05, 0.95))
+
+# Generate 95% confidence interval for the emperical data:
+
+sd = sd(X)
+mean = mean(X)
+n = length(X)
+
+err = qnorm(0.975)*sd/sqrt(n)
+left = mean - err
+right = mean + err
+
+cat("A 95% confidence interval for TotalBsmtSF is [", left, ",", right, "]") 
+```
+Conclusion : The data follow normal distribution than exponential distribution. Normal distribution would be
+helpful to explain the data better than exponential distribution.
+
+## Modeling
+```{r}
+train <- read.csv("/Users/bchand005c/CUNY/DATA-605/assignment/final/train.csv", header = TRUE)
+df.train <- as.data.frame(train)
+summary(df.train)
+```
+Based on summary stats, removing fields that are missing data
+```{r}
+df.train <- df.train %>% dplyr::select(-c(Street, Alley, LandContour, Utilities, 
+                           LandSlope, Condition2, MasVnrArea, Heating, 
+                           BsmtFinSF2, X2ndFlrSF, LowQualFinSF, BsmtFullBath, 
+                           BsmtHalfBath, HalfBath, PoolQC, PoolArea, MiscVal, 
+                           MiscFeature, Fence, ScreenPorch, Fireplaces,
+                           EnclosedPorch, MoSold, YrSold))
+```
+Convert categorical variables to numerical values
+```{r}
+df.train <- df.train %>% mutate_if(is.factor, as.numeric)
+```
+Replace NA with 0
+```{r}
+df.train <- df.train %>% replace(is.na(.), 0)
+```
+Convert sales price to log values as feature engineering
+```{r}
+df.train$SalePrice <- log(df.train$SalePrice)
+```
+Build initial model with all selected features
+```{r}
+sale_price_lm <- lm(SalePrice ~ . , data=df.train)
+summary(sale_price_lm)
+```
+Performs stepwise model selection by AIC.
+```{r}
+aic_lm <- stepAIC(sale_price_lm, trace=FALSE)
+summary(aic_lm)
+```
+Check R squared value
+```{r}
+summary(aic_lm)$r.squared
+```
+High value of R squared makes our model good fit of data.
+
+Checking the validity of model
+```{r}
+qqnorm(aic_lm$residuals); qqline(aic_lm$residuals)
+plot(aic_lm$fitted.values, aic_lm$residuals, 
+     xlab="Values", ylab="Residuals")
+abline(h=0)
+```
+Residuals don't show any patterns so the model is valid.
+
+Prediction
+```{r}
+test <- read.csv("/Users/bchand005c/CUNY/DATA-605/assignment/final/test.csv", header = TRUE)
+df.test <- as.data.frame(test)
+df.test <- df.test %>% dplyr::select(-c(Street, Alley, LandContour, Utilities, 
+                           LandSlope, Condition2, MasVnrArea, Heating, 
+                           BsmtFinSF2, X2ndFlrSF, LowQualFinSF, BsmtFullBath, 
+                           BsmtHalfBath, HalfBath, PoolQC, PoolArea, MiscVal, 
+                           MiscFeature, Fence, ScreenPorch, Fireplaces,
+                           EnclosedPorch, MoSold, YrSold))
+df.test <- df.test %>% mutate_if(is.factor, as.numeric)
+df.test <- df.test %>% replace(is.na(.), 0)
+
+pred_saleprice <- predict(aic_lm, df.test)
+kaggle <- data.frame(Id=test$Id, SalePrice=pred_saleprice)
+write.csv(kaggle, file = "submission.csv", row.names=FALSE)
+```
+Kaggle Submission
+```
+username : astilavista    score : 9.45492
+```
